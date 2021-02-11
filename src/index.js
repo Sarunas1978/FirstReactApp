@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import doFetch from './fetch.js';
+import { Form, Button, Col } from 'react-bootstrap'; 
 
 
 class MyForm extends React.Component {
@@ -10,19 +12,21 @@ class MyForm extends React.Component {
       super(props);
       this.state = { result: '',
                      value: ''};
-      this.handleBlur = this.handleBlur.bind(this)
+      this.handleSubmit = this.handleSubmit.bind(this)
       this.handleChange = this.handleChange.bind(this)
   }
 
-  handleBlur(e) {
+  async handleSubmit(e) {
       e.preventDefault();
-      
+      let data=await doFetch(this.state.value)
+      this.setState({result: data.data});
+
+      console.log(this.state.result);
       console.log(this.state.value+ " nieko")
       // this.props.onInputChange(e.target.value);
-      fetch("https://api.giphy.com/v1/gifs/search?api_key=nkV4IRRGJr4mFTMqnn49dtP0Tjg6ffaX&q=funny dogs&limit=12&offset=0&rating=g&lang=en")
-      .then(result => result.json())
-      .then(data => console.log(data.data))
+
   }
+  // funncija nebutina
   handleChange(e) {
     this.setState({ value: e.target.value });
     console.log(e.target.value)
@@ -32,17 +36,18 @@ class MyForm extends React.Component {
   render() {
       return (
       <div id="search-bar">
-          <form  onSubmit={this.handleBlur}>
-          <div>
-              <input
-              type="text"
-              // value={this.state.value}
-              onChange={this.handleChange}
-              placeholder="Enter search"
-              /> 
-                       
-          </div>
-          </form>
+          <Form onSubmit={this.handleSubmit}>
+               <Form.Row className="d-flex justify-content-center m-3">
+                  <Col sm={10}>
+                    <Form.Group controlId="formBasicSearch">
+                      {/* onchange nereikia */}
+                      <Form.Control onChange={this.handleChange} type="text" placeholder="Enter your search" />
+                    </Form.Group>
+                  </Col>
+                  <Button variant="primary" type="submit">Search</Button>
+              </Form.Row>
+          </Form>
+          
       </div>
       );
   }
