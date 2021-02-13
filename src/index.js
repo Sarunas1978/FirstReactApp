@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import ImagesShow from './showImages.js'
 import reportWebVitals from './reportWebVitals';
 import doFetch from './fetch.js';
-import { Form, Button, Col } from 'react-bootstrap'; 
+import {Form, Button, Col} from 'react-bootstrap'; 
 
 
 class MyForm extends React.Component {
@@ -20,18 +20,12 @@ class MyForm extends React.Component {
       e.preventDefault();
       let data=await doFetch(this.state.value)
       this.setState({result: data.data});
-
-      console.log(this.state.result);
-      console.log(this.state.value+ " nieko")
-      // this.props.onInputChange(e.target.value);
-
+      console.log("rezultatas: ",this.state.result);
   }
-  // funncija nebutina
+  // funkcija nebutina
   handleChange(e) {
     this.setState({ value: e.target.value });
-    console.log(e.target.value)
-    
-}
+  }
   
   render() {
       return (
@@ -47,45 +41,20 @@ class MyForm extends React.Component {
                   <Button variant="primary" type="submit">Search</Button>
               </Form.Row>
           </Form>
-          
+        {this.state.result ? <ImagesShow result={this.state.result} value={this.state.value} state={this.state} /> :null}
       </div>
       );
   }
 }
 
-// function UserLogin(props) {  
-//   return <h1>Welcome back!</h1>;  
-// }  
-// function GuestLogin(props) {  
-//   return <h1>Please sign up.</h1>;  
-// }  
-// function SignUp(props) {  
-//   const isLoggedIn = props.isLoggedIn; 
-//   console.log(props); 
-//   if (isLoggedIn) {  
-//     return <UserLogin />;  
-//   }  
-//   return <GuestLogin />;  
-// }  
-  
-// ReactDOM.render(  
-//   <SignUp isLoggedIn="true" good={56} />,  
-//   document.getElementById('meet')  
-// );  
-
-
 ReactDOM.render(
   <React.StrictMode>
-    <MyForm  brand="masina"/>
+    <MyForm  />
     {/* <App /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
   
-
-
-
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
