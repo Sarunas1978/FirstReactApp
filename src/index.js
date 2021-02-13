@@ -5,6 +5,7 @@ import ImagesShow from './showImages.js'
 import reportWebVitals from './reportWebVitals';
 import doFetch from './fetch.js';
 import {Form, Button, Col} from 'react-bootstrap'; 
+// import App from './App.js';
 
 
 class MyForm extends React.Component {
@@ -20,7 +21,7 @@ class MyForm extends React.Component {
       e.preventDefault();
       let data=await doFetch(this.state.value)
       this.setState({result: data.data});
-      console.log("rezultatas: ",this.state.result);
+      // console.log("rezultatas: ",this.state.result);
   }
   // funkcija nebutina
   handleChange(e) {
