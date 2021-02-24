@@ -13,6 +13,7 @@ class MyForm extends React.Component {
                      data: '',
                      imagesHaveBeenDisplayed: 0,
                      imagesAreDisplayedPerBlock: 12,
+                     inputError: false
                    };
       this.handleSubmit = this.handleSubmit.bind(this)
       this.handleChange = this.handleChange.bind(this)
@@ -21,17 +22,31 @@ class MyForm extends React.Component {
 // getting data from https://api.giphy.com/ 
   async handleSubmit(e) {
       e.preventDefault();
-      let data=await doFetch(this.state.value)
-      this.setState({imagesHaveBeenDisplayed: 0})
-      this.setState({
-        result: data.data.slice(0,this.state.imagesAreDisplayedPerBlock),
-        data: data.data,
-        imagesHaveBeenDisplayed: (this.state.imagesHaveBeenDisplayed+this.state.imagesAreDisplayedPerBlock),
-      });
+      
+      let correctInput=[...this.state.value].filter(item =>
+          !item.match(/^[0-9a-zA-Z]+$/)
+      )
+      if(correctInput.length===0){
+        this.setState({inputError : false});
+        let data=await doFetch(this.state.value)
+        this.setState({imagesHaveBeenDisplayed: 0})
+        this.setState({
+          result: data.data.slice(0,this.state.imagesAreDisplayedPerBlock),
+          data: data.data,
+          imagesHaveBeenDisplayed: (this.state.imagesHaveBeenDisplayed+this.state.imagesAreDisplayedPerBlock),
+        });
+      }
   }
-  // funkcija nebutina
+  // O input change
   handleChange(e) {
+    let letter_or_number=/^[0-9a-zA-Z]+$/
+    if(!e.target.value.match(letter_or_number))
+    {
+      this.setState({inputError : true});
+      console.log(this.state.inputError)
+    }
     this.setState({ value: e.target.value });
+    // console.log("input: "+e.target.value);
   }
 
   handleScroll(){
@@ -45,7 +60,9 @@ class MyForm extends React.Component {
   }
  
   render() {
-   
+  let error = this.state.inputError ? (
+              <div className="d-flex justify-content-center m-3">Only latin letters and numbers are alowed. Please check the input field above!</div>
+  ) :null;
     return (
       <div id="search-bar">
         <Form onSubmit={this.handleSubmit}>
@@ -57,8 +74,14 @@ class MyForm extends React.Component {
                   </Form.Group>
                 </Col>
                 <Button variant="primary" type="submit">Search</Button>
-            </Form.Row>
+             </Form.Row>
+             <Form.Row className="d-flex m-3">
+                <Col>
+                {error}
+                </Col>
+             </Form.Row>
         </Form>
+        
         {this.state.result ? <ImagesShow result={this.state.result} /> :null}
       </div>
     );
