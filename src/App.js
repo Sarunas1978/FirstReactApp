@@ -1,59 +1,61 @@
-// import logo from './logo.svg';
-// import './App.css';
+import React from 'react'
+import './App.css'
+class Popup extends React.Component {
+  constructor (props){
+    super(props);
+    this.state={
+      isPopupDone:false
+    };
+  }
+  render() {
+    console.log("propsai: ", this.props)
+    return (
+      <div className='popup'>
+        <div className='popup_inner'>
+        <button onClick={this.props.closePopup}>x</button>
+        </div>
+      </div>
+    );
+  }
+}
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPopup: this.props.showPopup
+    };
+  }
+  togglePopup() {
+  this.setState({
+      showPopup: !this.state.showPopup
+    });   
+  }
 
-// function App() {
-
-
-//   return (
-
-//     <div className="App">
-//       <header className="App-header">
-//         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload. May be
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-import React from 'react';   
-import ReactDOM from 'react-dom';   
+  render() {
   
-function ListItem(props) {  
-  const item = props.item;  
-  return (  
-    // No need to specify the key here.  
-    <li> {item} </li>  
-  );  
-}  
-function NameList(props) {  
-  const myLists = props.myLists;  
-  let a=0;
-  const listItems = myLists.map((strLists) =>  
-    // The key should have been specified here.  
-    <ListItem key={a++} item={strLists} />  
-  );  
-  return (  
-    <div>  
-        <h2>Correct Key Usage Example</h2>  
-            <ol>{listItems}</ol>  
-    </div>  
-  );  
-}  
-const myLists = ['Peter', 'Sachin', 'Kevin', 'Dhoni', 'Alisa'];  
-ReactDOM.render(  
-  <NameList myLists={myLists}/>,  
-  document.getElementById('meet')  
-);  
-export default NameList;  
+console.log("renderyje: ",this.state.showPopup)
+      return (
+      <div className='app'>
+      
+       {this.state.showPopup ? 
+          <Popup
+            closePopup={this.togglePopup.bind(this)}
+            showpop={this.state.showPopup}
+          />
+          : null
+        }
+      </div>
+    );
+  }
+};
 
+        // console.log(e)
+        // let div=document.createElement("div");
+        // let button=document.createElement("button")
+        // div.classList.add("app")
+        // button.classList.add("button")
+        // div.appendChild(button)
+        // document.body.appendChild(div)
+        // e.target.classList.add("popup")
+        // let popup=React.createElement("App", {class: "popup"})
 
