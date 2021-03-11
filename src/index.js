@@ -5,6 +5,9 @@ import ImagesShow from './showImages.js'
 import doFetch from './fetch.js';
 import {Form, Button, Col} from 'react-bootstrap'; 
 
+//  creating context for all data received
+export const dataReceived = React.createContext();
+
 class MyForm extends React.Component {
   constructor(props) {
       super(props);
@@ -81,8 +84,10 @@ class MyForm extends React.Component {
                 </Col>
              </Form.Row>
         </Form>
-        
-        {this.state.result ? <ImagesShow result={this.state.result} /> :null}
+        {this.state.result ? (
+          <dataReceived.Provider value={this.state.result}>
+            <ImagesShow/>
+          </dataReceived.Provider>) :null}
       </div>
     );
   }
@@ -95,7 +100,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-ReactDOM.render("",document.getElementById("meet"))
+// ReactDOM.render("",document.getElementById("meet"))
 
   
 // If you want to start measuring performance in your app, pass a function

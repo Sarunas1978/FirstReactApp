@@ -3,35 +3,35 @@ import ReactDOM from 'react-dom';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 // import App from './App.js';
 import './App.css'
+import {dataReceived} from "./index.js"
  
 
 class ImagesShow extends React.Component{
-    constructor(props){
-        super(props);
-        console.log("props: ", this.props.result)
-    }
-    componentDidMount(){
-
-    }
+    // constructor(props){
+    //     super(props);
+    //     console.log("props: ", this.props.result)
+    // }
+    // componentDidMount(){
+    // }
     render(){
-        // let a=this.props.result[1]?.images?.fixed_width_still?.url ?? "";
         return(
          <Container>
-            <RowOfImages result={this.props.result}/>
+            <RowOfImages/>
         </Container>
         )
     }
 }
 
-function RowOfImages (props){
-    const result=props.result;
+function RowOfImages (){
     let number=0, id=0;
-    const listItems=result.map(image =>
-        <SingleImage key={number++} id={id++} item={image.images.fixed_width_still.url} />
-        );
+
     return(
        <Row>
-            {listItems}
+           <dataReceived.Consumer>
+            { value => value.map(image =>
+              <SingleImage key={number++} id={id++} item={image.images.fixed_width_still.url} />
+            )}
+           </dataReceived.Consumer>
        </Row>
     )
 }
