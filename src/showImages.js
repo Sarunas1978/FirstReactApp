@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
-import { Container, Row, Col, Image } from 'react-bootstrap';
+import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 // import App from './App.js';
 import './App.css'
 import {dataReceived} from "./index.js"
@@ -54,7 +54,7 @@ function SingleImage (props){
            div=document.createElement('div');
            div.setAttribute('id', 'enlarge')
            document.body.appendChild(div);
-           ReactDOM.render(<Popup closePopup={handlePopupOff}/>, document.getElementById("enlarge"));
+           ReactDOM.render(<Popup closePopup={handlePopupOff} result={result}/>, document.getElementById("enlarge"));
 
         }
          return( ()=> {
@@ -64,22 +64,30 @@ function SingleImage (props){
          })
         
  
-    },[idSet, showPop])
+    },[idSet, showPop, result])
     return(
         <Col xs={6} md={4} lg={3}>
-            <Image onClick={(e)=> setId(e.target.id)} src={result} id={id} thumbnail>
-            </Image> 
+            <Image onClick={(e)=> setId(e.target.id)} src={result} id={id} thumbnail/>
         </Col>
     );
 }
 
 class Popup extends React.Component {
+    constructor(props){
+        super(props)
+        console.log(props)
+    }
     render() {
+      let buttonStyle = {
+        color:"",
+        textDecoration: "none",
+        borderRadius: "0 0 0 4px",
+        }
       return (
         <div className='popup'>
           <div className='popup_inner'>
-            <h1>{this.props.text}</h1>
-          <button onClick={this.props.closePopup}>x</button>
+            <Button className="button" variant="outline-light" style={buttonStyle} onClick={this.props.closePopup}>x</Button>
+            <Image className='popup_image' src={this.props.result}  alt="something"/>
           </div>
         </div>
       );
