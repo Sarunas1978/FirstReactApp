@@ -1,18 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
-// import App from './App.js';
-import './App.css'
-import {dataReceived} from "./index.js"
+import './App.css';
+import {dataReceived} from "./index.js";
+import PropTypes from 'prop-types';
  
 
 class ImagesShow extends React.Component{
-    // constructor(props){
-    //     super(props);
-    //     console.log("props: ", this.props.result)
-    // }
-    // componentDidMount(){
-    // }
     render(){
         return(
          <Container>
@@ -24,12 +18,15 @@ class ImagesShow extends React.Component{
 
 function RowOfImages (){
     let number=0, id=0;
-
     return(
        <Row>
            <dataReceived.Consumer>
-            { value => value.map(image =>
-              <SingleImage key={number++} id={id++} item={image.images.fixed_width_still.url} />
+            {value => value.map(image =>
+              <SingleImage 
+                key={number++}
+                id={id++}
+                item={image.images.fixed_width_still.url}
+              />
             )}
            </dataReceived.Consumer>
        </Row>
@@ -39,10 +36,9 @@ function RowOfImages (){
 function SingleImage (props){
     const result=props.item;
     const id=props.id;
-    
+  
     const [idSet, setId] = useState(-1);
     const [showPop, setShowPop] = useState(false);
-
 
     useEffect(() =>{
         function handlePopupOff(){
@@ -54,20 +50,27 @@ function SingleImage (props){
            div=document.createElement('div');
            div.setAttribute('id', 'enlarge')
            document.body.appendChild(div);
-           ReactDOM.render(<Popup closePopup={handlePopupOff} result={result}/>, document.getElementById("enlarge"));
 
+           ReactDOM.render(<Popup 
+                closePopup={handlePopupOff}
+                result={result}
+                />,document.getElementById("enlarge"));
         }
          return( ()=> {
              if(idSet!==-1 && showPop){ 
                  document.getElementById("enlarge").remove();
                 }
          })
-        
- 
     },[idSet, showPop, result])
+
     return(
         <Col xs={6} md={4} lg={3}>
-            <Image onClick={(e)=> setId(e.target.id)} src={result} id={id} thumbnail/>
+            <Image 
+                onClick={(e)=> setId(e.target.id)} 
+                src={result} 
+                id={id}
+                thumbnail
+            />
         </Col>
     );
 }
@@ -75,7 +78,7 @@ function SingleImage (props){
 class Popup extends React.Component {
     constructor(props){
         super(props)
-        console.log(props)
+        console.log("")
     }
     render() {
       let buttonStyle = {
@@ -94,6 +97,16 @@ class Popup extends React.Component {
     }
   }
 
+  Popup.propTypes = {
+    closePopup : function(props,propName, componentName){
+         if(!/Off/.test(props[propName])) { 
+             return new Error( 'Invalid prop `' + propName + '` supplied to' +
+             ' `' + componentName + '`. Validation failed.'
+           );
+         }
+     } ,
+    resul : PropTypes.string
+  }
 
 export default ImagesShow;
 export {SingleImage};
