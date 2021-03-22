@@ -46,7 +46,7 @@ class MyForm extends React.Component {
   // O input change
   handleChange(e) {
     console.log("value: ", e.target.value," + ", this.state.value)
-    if(MyForm.checkForErrors(this.target.value).length===0){
+    if(MyForm.checkForErrors(this.state.value).length===0){
       this.setState({inputError : false});
     }
 
@@ -74,6 +74,10 @@ class MyForm extends React.Component {
   }
   componentDidMount(){
     window.addEventListener('scroll', this.handleScroll) 
+  }
+
+  componentWillUnmount(){
+
   }
  
   render() {
