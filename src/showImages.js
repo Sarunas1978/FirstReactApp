@@ -76,6 +76,7 @@ function SingleImage (props){
 }
 
 class Popup extends React.Component {
+
     constructor(props){
         super(props)
         console.log("")
@@ -105,7 +106,7 @@ class Popup extends React.Component {
            );
          }
      } ,
-    resul : PropTypes.string
+    result : PropTypes.string
   }
 
 export default ImagesShow;

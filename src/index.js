@@ -22,14 +22,17 @@ class MyForm extends React.Component {
       this.handleChange = this.handleChange.bind(this)
       this.handleScroll = this.handleScroll.bind(this)
   }
+
+  static checkForErrors= value => 
+    [...value].filter(item =>
+      !item.match(/^[0-9a-zA-Z]+$/))
+  
+ 
 // getting data from https://api.giphy.com/ 
   async handleSubmit(e) {
       e.preventDefault();
       
-      let correctInput=[...this.state.value].filter(item =>
-          !item.match(/^[0-9a-zA-Z]+$/)
-      )
-      if(correctInput.length===0){
+      if(MyForm.checkForErrors(this.state.value).length===0){
         this.setState({inputError : false});
         let data=await doFetch(this.state.value)
         this.setState({imagesHaveBeenDisplayed: 0})
@@ -42,14 +45,25 @@ class MyForm extends React.Component {
   }
   // O input change
   handleChange(e) {
+    console.log("value: ", e.target.value," + ", this.state.value)
+    if(MyForm.checkForErrors(this.target.value).length===0){
+      this.setState({inputError : false});
+    }
+
+    // if entered wrong symbol show error
     let letter_or_number=/^[0-9a-zA-Z]+$/
     if(!e.target.value.match(letter_or_number))
     {
       this.setState({inputError : true});
-      console.log(this.state.inputError)
     }
     this.setState({ value: e.target.value });
-    // console.log("input: "+e.target.value);
+  }
+  // on keyy pressed show or discard error
+  handleOnKeyUp(e){
+    if(MyForm.checkForErrors(this.state.value).length===0){
+      this.setState({inputError : false});
+    }
+ console.log("labas", e.target.value)
   }
 
   handleScroll(){
@@ -72,8 +86,7 @@ class MyForm extends React.Component {
              <Form.Row className="d-flex justify-content-center m-3">
                 <Col sm={10}>
                   <Form.Group controlId="formBasicSearch">
-                    {/* onchange nereikia */}
-                    <Form.Control onChange={this.handleChange} type="text" placeholder="Enter your search" />
+                    <Form.Control onChange={this.handleChange} onKeyUp={this.handleOnKeyUp.bind(this)} type="text" placeholder="Enter your search" />
                   </Form.Group>
                 </Col>
                 <Button variant="primary" type="submit">Search</Button>
